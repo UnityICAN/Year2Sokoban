@@ -8,21 +8,26 @@ public class BoardManager : MonoBehaviour {
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite floorSprite;
 
+    [SerializeField] private Level levelToLoad;
+
     public TileType[,] TilesList { get; private set; }
     
     private void Start() {
+        // Lire l'info du niveau
+        string levelString = levelToLoad.Content;
+
+        string[] levelLines = levelString.Split('\n');
+
         // Créer le niveau
         TilesList = new TileType[10, 10];
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                if (x == 0 || y == 0 || x == 9 || y == 9)
+                if (levelLines[x][y] == 'W')
                     TilesList[x, y] = TileType.Wall;
                 else
                     TilesList[x, y] = TileType.Floor;
             }
         }
-
-        TilesList[4, 5] = TileType.Wall;
 
         playerController.Init(new Vector2Int(4, 4), this);
 
