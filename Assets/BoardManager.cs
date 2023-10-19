@@ -1,15 +1,18 @@
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
-    public GameObject tilePrefab;
-    public Transform boardTransform;
+    [SerializeField] private PlayerController playerController;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private Transform boardTransform;
 
-    public Sprite wallSprite;
-    public Sprite floorSprite;
+    [SerializeField] private Sprite wallSprite;
+    [SerializeField] private Sprite floorSprite;
 
     private TileType[,] tilesList;
     
     private void Start() {
+        playerController.Init();
+        
         // Créer le niveau
         tilesList = new TileType[10, 10];
         for (int x = 0; x < 10; x++) {
