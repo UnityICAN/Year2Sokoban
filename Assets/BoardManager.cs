@@ -13,7 +13,7 @@ public class BoardManager : MonoBehaviour {
     private void Start() {
         playerController.Init(this);
         
-        // Créer le niveau
+        // Create hard-coded level (to be replaced with level-loading logic)
         TilesList = new TileType[10, 10];
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -26,7 +26,7 @@ public class BoardManager : MonoBehaviour {
 
         TilesList[3, 2] = TileType.Wall;
 
-        // Afficher le niveau
+        // Display level
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 GameObject tile = Instantiate(tilePrefab,

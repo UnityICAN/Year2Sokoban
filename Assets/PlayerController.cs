@@ -6,7 +6,10 @@ public class PlayerController : MonoBehaviour {
     private BoardManager boardManager;
     
     public void Init(BoardManager boardManager) {
+        // Cache board manager
         this.boardManager = boardManager;
+        
+        // Init position
         position = new Vector2Int(4, 4);
         MakeVisualMovement();
     }
@@ -18,6 +21,7 @@ public class PlayerController : MonoBehaviour {
     private void Update() {
         Vector2Int projectedPosition = position;
         
+        // Determine projected position
         if (Input.GetButtonDown("Horizontal")) {
             float x = Input.GetAxis("Horizontal");
             if (x > 0f)
@@ -32,9 +36,11 @@ public class PlayerController : MonoBehaviour {
                 projectedPosition.y += 1;
         }
 
+        // Check if projected position possible
         if (boardManager.TilesList[projectedPosition.x, projectedPosition.y] == TileType.Wall)
             projectedPosition = position;
 
+        // Apply projected position
         if (projectedPosition != position) {
             position = projectedPosition;
             MakeVisualMovement();
