@@ -1,11 +1,12 @@
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
-    public GameObject tilePrefab;
-    public Transform boardTransform;
+    [SerializeField] private GameObject tilePrefab;
+    [SerializeField] private Transform boardTransform;
+    [SerializeField] private PlayerController playerController;
 
-    public Sprite wallSprite;
-    public Sprite floorSprite;
+    [SerializeField] private Sprite wallSprite;
+    [SerializeField] private Sprite floorSprite;
 
     private TileType[,] tilesList;
     
@@ -20,6 +21,8 @@ public class BoardManager : MonoBehaviour {
                     tilesList[x, y] = TileType.Floor;
             }
         }
+
+        playerController.Init(new Vector2Int(4, 4));
 
         // Afficher le niveau
         for (int x = 0; x < 10; x++) {

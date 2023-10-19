@@ -261,6 +261,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tilePrefab: {fileID: 6703517439440116155, guid: 63446691c5cfab245b8cbc214a78462b, type: 3}
   boardTransform: {fileID: 1434256654}
+  playerController: {fileID: 1766172547}
+  wallSprite: {fileID: 21300000, guid: c948f14387db4184994f1982cf1b8ce7, type: 3}
+  floorSprite: {fileID: 21300000, guid: eb47b0654c0641d40bf527c662c11de9, type: 3}
 --- !u!1 &1766172546
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 1766172546}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 4, y: -4, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
