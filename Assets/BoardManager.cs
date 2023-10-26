@@ -27,11 +27,11 @@ public class BoardManager : MonoBehaviour {
         BoxesList = new List<Vector2Int>();
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                if (levelLines[x][y] == 'W')
+                if (levelLines[y][x] == 'W')
                     TilesList[x, y] = TileType.Wall;
                 else {
                     TilesList[x, y] = TileType.Floor;
-                    if (levelLines[x][y] == 'B')
+                    if (levelLines[y][x] == 'B')
                         BoxesList.Add(new Vector2Int(x, y));
                 }
             }
