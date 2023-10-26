@@ -25,6 +25,7 @@ public class BoardManager : MonoBehaviour {
         // Créer le niveau
         TilesList = new TileType[10, 10];
         BoxesList = new List<Vector2Int>();
+        Vector2Int startPosition = new Vector2Int(0, 0);
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 if (levelLines[y][x] == 'W')
@@ -33,11 +34,13 @@ public class BoardManager : MonoBehaviour {
                     TilesList[x, y] = TileType.Floor;
                     if (levelLines[y][x] == 'B')
                         BoxesList.Add(new Vector2Int(x, y));
+                    else if (levelLines[y][x] == 'S')
+                        startPosition = new Vector2Int(x, y);
                 }
             }
         }
 
-        playerController.Init(new Vector2Int(4, 4), this);
+        playerController.Init(startPosition, this);
 
         // Initialiser le plateau
         BoardTilesList = new GameObject[10, 10];
@@ -56,7 +59,6 @@ public class BoardManager : MonoBehaviour {
     public void UpdateVisuals() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                
                 if (TilesList[x, y] == TileType.Wall)
                     BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = wallSprite;
                 else if (TilesList[x, y] == TileType.Floor) {
