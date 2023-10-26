@@ -9,12 +9,14 @@ public class BoardManager : MonoBehaviour {
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite floorSprite;
     [SerializeField] private Sprite boxSprite;
+    [SerializeField] private Sprite endPositionSprite;
 
     [SerializeField] private Level levelToLoad;
 
     public TileType[,] TilesList { get; private set; }
     public GameObject[,] BoardTilesList { get; private set; }
     public List<Vector2Int> BoxesList { get; private set; }
+    private List<Vector2Int> endPositionsList;
 
     private void Start() {
         // Lire l'info du niveau
@@ -25,6 +27,7 @@ public class BoardManager : MonoBehaviour {
         // Créer le niveau
         TilesList = new TileType[10, 10];
         BoxesList = new List<Vector2Int>();
+        endPositionsList = new List<Vector2Int>();
         Vector2Int startPosition = new Vector2Int(0, 0);
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -36,6 +39,8 @@ public class BoardManager : MonoBehaviour {
                         BoxesList.Add(new Vector2Int(x, y));
                     else if (levelLines[y][x] == 'S')
                         startPosition = new Vector2Int(x, y);
+                    else if (levelLines[y][x] == 'E')
+                        endPositionsList.Add(new Vector2Int(x, y));
                 }
             }
         }
@@ -56,7 +61,7 @@ public class BoardManager : MonoBehaviour {
         UpdateVisuals();
     }
 
-    public void UpdateVisuals() {
+    private void UpdateVisuals() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 if (TilesList[x, y] == TileType.Wall)
@@ -64,10 +69,26 @@ public class BoardManager : MonoBehaviour {
                 else if (TilesList[x, y] == TileType.Floor) {
                     if (BoxesList.Contains(new Vector2Int(x, y)))
                         BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = boxSprite;
+                    else if (endPositionsList.Contains(new Vector2Int(x, y)))
+                        BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = endPositionSprite;
                     else
                         BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = floorSprite;
                 }
             }
         }
+    }
+
+    public void HandleMove() {
+        UpdateVisuals();
+        CheckVictory();
+    }
+
+    private void CheckVictory() {
+        foreach (Vector2Int endPosition in endPositionsList) {
+            if (!BoxesList.Contains(endPosition))
+                return;
+        }
+        
+        Debug.Log("Victory!");
     }
 }

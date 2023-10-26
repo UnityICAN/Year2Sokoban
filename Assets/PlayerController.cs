@@ -50,7 +50,7 @@ public class PlayerController : MonoBehaviour {
             position = desiredPosition;
             // Appliquer la position
             ApplyVisualMovement();
-            boardManager.UpdateVisuals();
+            boardManager.HandleMove();
         }
     }
 

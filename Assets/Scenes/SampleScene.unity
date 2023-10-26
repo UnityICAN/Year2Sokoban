@@ -265,6 +265,7 @@ MonoBehaviour:
   wallSprite: {fileID: 21300000, guid: c948f14387db4184994f1982cf1b8ce7, type: 3}
   floorSprite: {fileID: 21300000, guid: eb47b0654c0641d40bf527c662c11de9, type: 3}
   boxSprite: {fileID: 21300000, guid: adfec4e5815cb6a4eb55f9508dec9250, type: 3}
+  endPositionSprite: {fileID: 21300000, guid: ff267dcc41b6ada47acbe9d3a70e38e8, type: 3}
   levelToLoad: {fileID: 11400000, guid: 7b85b1e97c47c254eabe1db2f502871f, type: 2}
 --- !u!114 &1766172547 stripped
 MonoBehaviour:
