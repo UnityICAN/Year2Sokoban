@@ -13,6 +13,7 @@ public class BoardManager : MonoBehaviour {
     [SerializeField] private Level levelToLoad;
 
     public TileType[,] TilesList { get; private set; }
+    public GameObject[,] BoardTilesList { get; private set; }
     public List<Vector2Int> BoxesList { get; private set; }
 
     private void Start() {
@@ -38,20 +39,31 @@ public class BoardManager : MonoBehaviour {
 
         playerController.Init(new Vector2Int(4, 4), this);
 
-        // Afficher le niveau
+        // Initialiser le plateau
+        BoardTilesList = new GameObject[10, 10];
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
-                GameObject tile = Instantiate(tilePrefab,
+                BoardTilesList[x, y] = Instantiate(tilePrefab,
                     new Vector3(x, -y, 0f),
                     Quaternion.identity,
                     boardTransform);
-                if (TilesList[x,y] == TileType.Wall)
-                    tile.GetComponent<SpriteRenderer>().sprite = wallSprite;
+            }
+        }
+        
+        UpdateVisuals();
+    }
+
+    public void UpdateVisuals() {
+        for (int x = 0; x < 10; x++) {
+            for (int y = 0; y < 10; y++) {
+                
+                if (TilesList[x, y] == TileType.Wall)
+                    BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = wallSprite;
                 else if (TilesList[x, y] == TileType.Floor) {
                     if (BoxesList.Contains(new Vector2Int(x, y)))
-                        tile.GetComponent<SpriteRenderer>().sprite = boxSprite;
+                        BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = boxSprite;
                     else
-                        tile.GetComponent<SpriteRenderer>().sprite = floorSprite;
+                        BoardTilesList[x, y].GetComponent<SpriteRenderer>().sprite = floorSprite;
                 }
             }
         }

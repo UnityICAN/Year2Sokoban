@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -32,10 +33,29 @@ public class PlayerController : MonoBehaviour {
         }
         
         // Vérifier si position est possible
-        if (boardManager.TilesList[desiredPosition.x, desiredPosition.y] == TileType.Floor) {
+        if (boardManager.TilesList[desiredPosition.x, desiredPosition.y] == TileType.Floor
+            && !CheckIfPositionOutOfBounds(desiredPosition)
+            && position != desiredPosition) {
+            // Vérifier si on doit pousser une boite
+            if (boardManager.BoxesList.Contains(new Vector2Int(desiredPosition.x, desiredPosition.y))) {
+                Vector2Int positionDelta = desiredPosition - position;
+                Vector2Int boxDesiredPosition = desiredPosition + positionDelta;
+                if (boardManager.TilesList[boxDesiredPosition.x, boxDesiredPosition.y] == TileType.Wall
+                    || boardManager.BoxesList.Contains(boxDesiredPosition)
+                    || CheckIfPositionOutOfBounds(boxDesiredPosition))
+                    return;
+
+                boardManager.BoxesList.Remove(desiredPosition);
+                boardManager.BoxesList.Add(boxDesiredPosition);
+            }
             position = desiredPosition;
             // Appliquer la position
             ApplyVisualMovement();
+            boardManager.UpdateVisuals();
         }
+    }
+
+    private bool CheckIfPositionOutOfBounds(Vector2Int position) {
+        return position.x < 0 || position.x > 9 || position.y < 0 || position.y > 9;
     }
 }
