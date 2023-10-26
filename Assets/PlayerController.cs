@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using UndoSystem;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
@@ -7,6 +9,11 @@ public class PlayerController : MonoBehaviour {
     public void Init(Vector2Int initialPosition, BoardManager boardManager) {
         this.boardManager = boardManager;
         position = initialPosition;
+        ApplyVisualMovement();
+    }
+
+    public void ForceChangePosition(Vector2Int newPosition) {
+        position = newPosition;
         ApplyVisualMovement();
     }
 
@@ -35,6 +42,9 @@ public class PlayerController : MonoBehaviour {
         if (boardManager.TilesList[desiredPosition.x, desiredPosition.y] == TileType.Floor
             && !CheckIfPositionOutOfBounds(desiredPosition)
             && position != desiredPosition) {
+            List<Vector2Int> boxesPositionsBeforeMovement = new List<Vector2Int>(boardManager.BoxesList);
+            PlayerMovementAction playerMovementAction = new PlayerMovementAction(position, boxesPositionsBeforeMovement);
+            
             // Vérifier si on doit pousser une boite
             if (boardManager.BoxesList.Contains(new Vector2Int(desiredPosition.x, desiredPosition.y))) {
                 Vector2Int positionDelta = desiredPosition - position;
@@ -50,7 +60,7 @@ public class PlayerController : MonoBehaviour {
             position = desiredPosition;
             // Appliquer la position
             ApplyVisualMovement();
-            boardManager.HandleMove();
+            boardManager.HandleMove(playerMovementAction);
         }
     }
 

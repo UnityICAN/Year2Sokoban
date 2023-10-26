@@ -1,7 +1,11 @@
 using System.Collections.Generic;
+using System.Linq;
+using UndoSystem;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
+    public static BoardManager instance;
+    
     [SerializeField] private GameObject tilePrefab;
     [SerializeField] private Transform boardTransform;
     [SerializeField] private PlayerController playerController;
@@ -18,7 +22,15 @@ public class BoardManager : MonoBehaviour {
     public List<Vector2Int> BoxesList { get; private set; }
     private List<Vector2Int> endPositionsList;
 
+    private Stack<PlayerAction> playerActions;
+
     private void Start() {
+        if (instance != null)
+            Destroy(gameObject);
+        instance = this;
+
+        playerActions = new Stack<PlayerAction>();
+        
         // Lire l'info du niveau
         string levelString = levelToLoad.Content;
 
@@ -61,6 +73,12 @@ public class BoardManager : MonoBehaviour {
         UpdateVisuals();
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.Z) && playerActions.Count > 0) {
+            playerActions.Pop().Undo();
+        }
+    }
+
     private void UpdateVisuals() {
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
@@ -78,7 +96,8 @@ public class BoardManager : MonoBehaviour {
         }
     }
 
-    public void HandleMove() {
+    public void HandleMove(PlayerAction playerAction) {
+        playerActions.Push(playerAction);
         UpdateVisuals();
         CheckVictory();
     }
@@ -90,5 +109,11 @@ public class BoardManager : MonoBehaviour {
         }
         
         Debug.Log("Victory!");
+    }
+
+    public void UpdateEntitiesPositions(Vector2Int playerPosition, IReadOnlyList<Vector2Int> boxesPositions) {
+        playerController.ForceChangePosition(playerPosition);
+        BoxesList = boxesPositions.ToList();
+        UpdateVisuals();
     }
 }
