@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class BoardManager : MonoBehaviour {
@@ -7,11 +8,13 @@ public class BoardManager : MonoBehaviour {
 
     [SerializeField] private Sprite wallSprite;
     [SerializeField] private Sprite floorSprite;
+    [SerializeField] private Sprite boxSprite;
 
     [SerializeField] private Level levelToLoad;
 
     public TileType[,] TilesList { get; private set; }
-    
+    public List<Vector2Int> BoxesList { get; private set; }
+
     private void Start() {
         // Lire l'info du niveau
         string levelString = levelToLoad.Content;
@@ -20,12 +23,16 @@ public class BoardManager : MonoBehaviour {
 
         // Créer le niveau
         TilesList = new TileType[10, 10];
+        BoxesList = new List<Vector2Int>();
         for (int x = 0; x < 10; x++) {
             for (int y = 0; y < 10; y++) {
                 if (levelLines[x][y] == 'W')
                     TilesList[x, y] = TileType.Wall;
-                else
+                else {
                     TilesList[x, y] = TileType.Floor;
+                    if (levelLines[x][y] == 'B')
+                        BoxesList.Add(new Vector2Int(x, y));
+                }
             }
         }
 
@@ -40,8 +47,12 @@ public class BoardManager : MonoBehaviour {
                     boardTransform);
                 if (TilesList[x,y] == TileType.Wall)
                     tile.GetComponent<SpriteRenderer>().sprite = wallSprite;
-                else if (TilesList[x,y] == TileType.Floor)
-                    tile.GetComponent<SpriteRenderer>().sprite = floorSprite;
+                else if (TilesList[x, y] == TileType.Floor) {
+                    if (BoxesList.Contains(new Vector2Int(x, y)))
+                        tile.GetComponent<SpriteRenderer>().sprite = boxSprite;
+                    else
+                        tile.GetComponent<SpriteRenderer>().sprite = floorSprite;
+                }
             }
         }
     }
