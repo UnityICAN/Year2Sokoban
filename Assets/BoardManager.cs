@@ -57,7 +57,7 @@ public class BoardManager : MonoBehaviour {
             }
         }
 
-        playerController.Init(startPosition, this);
+        playerController.Init(startPosition);
 
         // Initialiser le plateau
         BoardTilesList = new GameObject[10, 10];

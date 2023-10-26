@@ -3,11 +3,9 @@ using UndoSystem;
 using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
-    private BoardManager boardManager;
     private Vector2Int position;
 
-    public void Init(Vector2Int initialPosition, BoardManager boardManager) {
-        this.boardManager = boardManager;
+    public void Init(Vector2Int initialPosition) {
         position = initialPosition;
         ApplyVisualMovement();
     }
@@ -39,28 +37,28 @@ public class PlayerController : MonoBehaviour {
         }
         
         // Vérifier si position est possible
-        if (boardManager.TilesList[desiredPosition.x, desiredPosition.y] == TileType.Floor
+        if (BoardManager.instance.TilesList[desiredPosition.x, desiredPosition.y] == TileType.Floor
             && !CheckIfPositionOutOfBounds(desiredPosition)
             && position != desiredPosition) {
-            List<Vector2Int> boxesPositionsBeforeMovement = new List<Vector2Int>(boardManager.BoxesList);
+            List<Vector2Int> boxesPositionsBeforeMovement = new List<Vector2Int>(BoardManager.instance.BoxesList);
             PlayerMovementAction playerMovementAction = new PlayerMovementAction(position, boxesPositionsBeforeMovement);
             
             // Vérifier si on doit pousser une boite
-            if (boardManager.BoxesList.Contains(new Vector2Int(desiredPosition.x, desiredPosition.y))) {
+            if (BoardManager.instance.BoxesList.Contains(new Vector2Int(desiredPosition.x, desiredPosition.y))) {
                 Vector2Int positionDelta = desiredPosition - position;
                 Vector2Int boxDesiredPosition = desiredPosition + positionDelta;
-                if (boardManager.TilesList[boxDesiredPosition.x, boxDesiredPosition.y] == TileType.Wall
-                    || boardManager.BoxesList.Contains(boxDesiredPosition)
+                if (BoardManager.instance.TilesList[boxDesiredPosition.x, boxDesiredPosition.y] == TileType.Wall
+                    || BoardManager.instance.BoxesList.Contains(boxDesiredPosition)
                     || CheckIfPositionOutOfBounds(boxDesiredPosition))
                     return;
 
-                boardManager.BoxesList.Remove(desiredPosition);
-                boardManager.BoxesList.Add(boxDesiredPosition);
+                BoardManager.instance.BoxesList.Remove(desiredPosition);
+                BoardManager.instance.BoxesList.Add(boxDesiredPosition);
             }
             position = desiredPosition;
             // Appliquer la position
             ApplyVisualMovement();
-            boardManager.HandleMove(playerMovementAction);
+            BoardManager.instance.HandleMove(playerMovementAction);
         }
     }
 
